@@ -1,9 +1,11 @@
+import time
 from dao.SharesBasicDao import SharesBasicDao
 from utils.DaoHelper import DaoHelper
 import logging
 
-logging.basicConfig(level=logging.WARNING,
-                    format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s')
+dt = time.strftime('%Y%m%d', time.localtime())
+logging.basicConfig(filename='run_' + str(dt) + '.log', level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class SharesBasicBll:
@@ -14,16 +16,16 @@ class SharesBasicBll:
     @staticmethod
     def select_available_no():
         shares = SharesBasicDao.select_all_shares()
-        logging.info("取出全部股票代码 共%s条", len(shares))
+        logger.info("取出全部股票代码 共%s条", len(shares))
         shares = list(
             filter(lambda item: not (item['name'].startswith("ST") or item['name'].startswith('*ST')), shares))
-        logging.info("过滤ST股票代码 共%s条", len(shares))
+        logger.info("过滤ST股票代码 共%s条", len(shares))
 
         shares = list(filter(lambda item: not item['shares_no'].startswith("300", 2, 5), shares))
-        logging.info("过滤创业板股票代码 共%s条", len(shares))
+        logger.info("过滤创业板股票代码 共%s条", len(shares))
 
         shares = list(filter(lambda item: not item['shares_no'].startswith("688", 2, 5), shares))
-        logging.info("过滤科创板股票代码 共%s条", len(shares))
+        logger.info("过滤科创板股票代码 共%s条", len(shares))
 
         return [i_item['shares_no'] for i_item in shares]
 
