@@ -3,6 +3,9 @@ from bll.SharesPriceBll import SharesPriceBll
 from bll.SnowballBll import SnowballBll
 
 if __name__ == '__main__':
+    # 插入股票数据
+    # SharesBasicBll.insert_shares_data()
+
     shares_nos = SharesBasicBll.select_available_no()
     for item in shares_nos:
         shares_quote_data = SnowballBll.quotec(item)
